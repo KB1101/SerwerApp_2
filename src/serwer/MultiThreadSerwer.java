@@ -22,6 +22,7 @@ public class MultiThreadSerwer implements Runnable{
         this.socket = socket;
         this.magazyn = magazyn;
         this.kontroler = kontroler;
+
     }
 
     public void run(){
