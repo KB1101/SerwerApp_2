@@ -22,7 +22,7 @@ public class MultiThreadSerwer implements Runnable{
         this.socket = socket;
         this.magazyn = magazyn;
         this.kontroler = kontroler;
-
+        this.magazyn.addSocket(this);
     }
 
     public void run(){
@@ -51,10 +51,22 @@ public class MultiThreadSerwer implements Runnable{
 
     private void process(DataInputStream dis,DataOutputStream dos ){
         try {
+            int uid = magazyn.addUser();
+            String suid = Integer.toString(uid);
+            dos.writeBytes(suid+"\n\r");
 
+            byte[] buffer = new byte[1024];
+            int bytes;
+
+            while ((bytes = dis.read(buffer)) != -1) {
+                System.out.write(buffer, 0, bytes);
+             //  akcje
+            }
 
         } catch (Exception ex){
             System.out.println(ex);
+        } finally {
+            this.magazyn.delUser();
         }
     }
 
@@ -62,7 +74,7 @@ public class MultiThreadSerwer implements Runnable{
 
 
 
-//int uid = magazyn.addUser(socket.getInetAddress().toString());
+            //int uid = magazyn.addUser(socket.getInetAddress().toString());
             /*String suid = Integer.toString(uid);
 
             dos.writeBytes("ID: "+suid+"\n\r");
