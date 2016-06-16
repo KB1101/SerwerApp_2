@@ -1,5 +1,8 @@
 package data;
 
+import serwer.MultiThreadSerwer;
+
+import java.net.Socket;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -14,10 +17,16 @@ public class SeperateQueues {
         this.queueList = new LinkedList<>();
         this.magazyn=magazynDanych;
         new Thread(()->{while(true){
-            String stringFromMainQueue= (String)magazyn.getMovesPackets().poll();
-            queueList.forEach(queue -> queue.add(stringFromMainQueue));
+            if(magazyn.getMovesPackets().size() > 0) {
+                String stringFromMainQueue = (String) magazyn.getMovesPackets().poll();
+                System.out.println("z separate ---->" + stringFromMainQueue);
+                queueList.forEach(queue -> queue.add(stringFromMainQueue));
+                for (MultiThreadSerwer mts: this.magazyn.users) {
+                    mts.send();
+                }
+            }
         }
-        });
+        }).start();
     }
 
     public ConcurrentLinkedQueue addQueue(){

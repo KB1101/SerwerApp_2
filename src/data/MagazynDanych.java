@@ -1,5 +1,6 @@
 package data;
 
+import serwer.MultiThreadSerwer;
 import sun.plugin.javascript.navig.LinkArray;
 
 import java.net.Socket;
@@ -13,17 +14,17 @@ import java.util.concurrent.SynchronousQueue;
  */
 public class MagazynDanych {
 
-    private ArrayList<Socket> users;
-    private int activeUsers;
+    public ArrayList<MultiThreadSerwer> users;
+    public int activeUsers;
     private ConcurrentLinkedQueue movesPackets;
     private SeperateQueues seperateQueues;
 
 
     public MagazynDanych(){
+        this.movesPackets= new ConcurrentLinkedQueue<String>();
         this.seperateQueues=new SeperateQueues(this);
         this.users = new ArrayList();
         this.activeUsers = 0;
-        this.movesPackets= new ConcurrentLinkedQueue<String>();
     }
     public Queue getMovesPackets() {
         return movesPackets;
